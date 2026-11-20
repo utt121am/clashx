@@ -1,0 +1,63 @@
+[gd_scene load_steps=7 format=3 uid="uid://mainscene001"]
+
+[ext_resource type="PackedScene" path="res://scenes/arena/arena.tscn" id="1_arena"]
+[ext_resource type="PackedScene" path="res://scenes/fighter/fighter.tscn" id="2_fighter"]
+[ext_resource type="Script" path="res://scripts/camera/fighting_camera.gd" id="3_camera"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_main"]
+sky_top_color = Color(0.25, 0.35, 0.55, 1)
+sky_horizon_color = Color(0.65, 0.7, 0.75, 1)
+ground_bottom_color = Color(0.1, 0.12, 0.15, 1)
+ground_horizon_color = Color(0.4, 0.45, 0.5, 1)
+
+[sub_resource type="Sky" id="Sky_main"]
+sky_material = SubResource("ProceduralSkyMaterial_main")
+
+[sub_resource type="Environment" id="Environment_main"]
+background_mode = 2
+sky = SubResource("Sky_main")
+ambient_light_source = 2
+ambient_light_color = Color(0.6, 0.65, 0.7, 1)
+ambient_light_energy = 0.5
+tonemap_mode = 2
+
+[node name="Main" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_main")
+
+[node name="SunLight" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.866025, -0.353553, 0.353553, 0, 0.707107, 0.707107, -0.5, -0.612372, 0.612372, 5, 12, 8)
+light_color = Color(1, 0.96, 0.9, 1)
+light_energy = 1.1
+shadow_enabled = true
+
+[node name="FillLight" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866025, 0.25, -0.433013, 0, 0.866025, 0.5, 0.5, 0.433013, -0.75, -5, 8, -6)
+light_color = Color(0.7, 0.8, 0.95, 1)
+light_energy = 0.4
+
+[node name="Arena" parent="." instance=ExtResource("1_arena")]
+
+[node name="Fighter1" parent="." node_paths=PackedStringArray("opponent") instance=ExtResource("2_fighter")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 0, 0)
+player_id = 1
+fighter_name = "Player 1"
+accent_color = Color(0.18, 0.55, 0.95, 1)
+opponent = NodePath("../Fighter2")
+facing_direction = 1.0
+
+[node name="Fighter2" parent="." node_paths=PackedStringArray("opponent") instance=ExtResource("2_fighter")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 0, 0)
+player_id = 2
+fighter_name = "Player 2"
+accent_color = Color(0.95, 0.25, 0.18, 1)
+opponent = NodePath("../Fighter1")
+facing_direction = -1.0
+
+[node name="FightingCamera" type="Camera3D" parent="." node_paths=PackedStringArray("target1", "target2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.2, 7.5)
+current = true
+script = ExtResource("3_camera")
+target1 = NodePath("../Fighter1")
+target2 = NodePath("../Fighter2")

@@ -1,0 +1,9 @@
+[gd_scene load_steps=3 format=3 uid="uid://testv02scene"]
+
+[ext_resource type="PackedScene" path="res://scenes/main/main.tscn" id="1_main"]
+[ext_resource type="Script" path="res://scripts/tests/test_v02_runner.gd" id="2_runner"]
+
+[node name="TestMain" instance=ExtResource("1_main")]
+
+[node name="TestRunner" type="Node" parent="."]
+script = ExtResource("2_runner")
